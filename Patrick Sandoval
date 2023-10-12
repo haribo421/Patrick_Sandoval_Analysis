@@ -1,0 +1,28 @@
+# Sandoval Information in Baseballr
+
+---
+
+- **Player ID:** 663776
+- **Position:** Pitcher
+- **Team:** Los Angeles Angels
+- **Age:** 26
+
+# How To
+
+# To search a pitcher’s performance during a time period, use: 
+# The following example is using Sandoval's start at 2022-06-12
+try(statcast_search(start_date = "2022-6-06",
+                    end_date = "2022-6-16",
+                    playerid = 663776,                 
+                    player_type = 'pitcher'))
+
+# R studio only loads certain amount of rows, to load more rows, use:
+# To print more rows
+%>% print(n = row number)
+
+put this code behind the original code, for example:
+
+try(statcast_search(start_date = "2022-6-06",
+                    end_date = "2022-6-16",
+                    playerid = 663776,               
+                    player_type = 'pitcher')) %>% print (n = row number)
