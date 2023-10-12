@@ -1,1 +1,43 @@
+# Load a package
+library()
 
+# Filter ROW
+# for example, I only want data from the 2020 season
+
+filter(season == 2020)
+
+# Select COLUMNS
+# for example, pitch type and spin rate
+
+select(pitch_type, spin_rate)
+
+# Arrange anything in order
+# for example, arrange release speed in order
+
+arrange(-release_speed)
+
+# Make New Variables
+# changing feet to inches for instance, which is feet*12 = inch
+# with pitching movement
+
+mutate(pitching_movement = pitch_movement * 12)
+
+# Summarise Data
+# create summary
+# for example, summarise the strikes thrown
+
+summarise(Total_Strike = sum(strikes))
+
+# or summarise the average speed of his sinker
+
+summarise(AvgSinkVelo = mean(release_speed))
+
+# Create Sub-Groups
+# group by release speed and pitch type
+
+group_by(pitch_type, release_speed)
+
+**Essentially, group_by() function can't be used independently, it helps with the steps to come.**
+**You can use group_by() with summarise()
+**If you don't use group_by for a dataset and went straight to summarise, R is gonna assume that you want to summarise the whole thing**
+**Using group_by helps you to pick the things you want to summarise**
