@@ -1,4 +1,4 @@
-# Sandoval Information in Baseballr
+**Sandoval Information in Baseballr**
 
 ---
 
@@ -7,22 +7,45 @@
 - **Team:** Los Angeles Angels
 - **Age:** 26
 
-# How To
+**How To**
 
-# To search a pitcher’s performance during a time period, use: 
+**To search a pitcher’s performance during a time period, use**
 # The following example is using Sandoval's start at 2022-06-12
 try(statcast_search(start_date = "2022-6-06",
                     end_date = "2022-6-16",
                     playerid = 663776,                 
                     player_type = 'pitcher'))
 
-# R studio only loads certain amount of rows, to load more rows, use:
+**R studio only loads certain amount of rows, to load more rows, use**
 # To print more rows
 %>% print(n = row number)
 
-put this code behind the original code, for example:
+**put this code behind the original code, for example**
 
 try(statcast_search(start_date = "2022-6-06",
                     end_date = "2022-6-16",
                     playerid = 663776,               
                     player_type = 'pitcher')) %>% print (n = row number)
+
+**To name the tibble as Sandoval, simply add his name in from of the code**
+# Name the tibble as Sandoval
+Patrick_Sandoval <- try(statcast_search(start_date = "2022-6-06",
+                                        end_date = "2022-6-16",
+                                        playerid = 663776,                 
+                                        player_type = 'pitcher')) %>% print (n = row number)
+
+# To view the data in chart, type:
+View(Patrick_Sandoval)
+
+**Next, I will be analyzing Sandoval’s release speed during the start as an example**
+# X axis as independent variables, in this case, his pitch type
+# Y axis as dependent variables, in this case, his release speed
+
+library(ggplot2)
+library(tidyverse)
+Patrick_Sandoval %>%  
+  ggplot(aes(pitch_type, release_speed, color = pitch_type))+  
+  geom_point(size = 5, alpha = 0.3)+  
+  geom_line(size = 1)+  
+  theme_minimal()+  
+  labs(title = "Sandoval Pitching Type and Release Speed")
