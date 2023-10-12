@@ -38,6 +38,8 @@ Patrick_Sandoval <- try(statcast_search(start_date = "2022-6-06",
 View(Patrick_Sandoval)
 
 **Next, I will be analyzing Sandoval’s release speed during the start as an example**
+# check graph 1 for result
+
 # X axis as independent variables, in this case, his pitch type
 # Y axis as dependent variables, in this case, his release speed
 
@@ -49,3 +51,117 @@ Patrick_Sandoval %>%
   geom_line(size = 1)+  
   theme_minimal()+  
   labs(title = "Sandoval Pitching Type and Release Speed")
+
+**Now I’m going to make an advanced chart using pitching type, release speed, and release spin rate**
+# check graph 2 for result
+
+# Sandoval's Pitching type, in relation to his release speed and spin rate
+# Row 52 and 81 are missing release spin rate, you will see a warning when you run the code
+
+Warning message: Removed 2 rows containing missing values (`geom_point()`).
+
+# X axis = release_speed
+# Y axis = release_spin_rate
+
+library(ggplot2)
+library(tidyverse)
+Patrick_Sandoval %>%  
+  ggplot(aes(release_speed,
+  release_spin_rate, color = pitch_type))+
+  geom_point(size = 3, alpha = 0.5)+
+  theme_minimal()+
+  labs(title = "Sandoval's Pitching Type, and relation with release spin rate and release speed")
+
+**More advanced, we can try to merge his two starts into one, and analyze his two combined-starts. But first, we are gonna pull out his another start, this time vs. the Dodgers**
+
+# reload baseballr and tidyverse
+# the reason why I picked this game is because it's similar pitch count as the previous one
+# name this start as Patrick_Sandoval2
+
+library(baseballr)
+library(tidyverse)
+Patrick_Sandoval2 <- try(statcast_search(start_date = "2022-7-10",
+                                         end_date = "2022-7-20",
+                                         playerid = 663776,
+                                         player_type = 'pitcher')) %>% print(n = 102)
+
+**Now I’m going to use the same code for this data, skipping the first chart, let’s cut straight right into the second chart**
+# check graph 3 for result
+
+# run the second chart on this data set
+# no warning this time because all the data is available
+
+library(ggplot2)
+library(tidyverse)
+Patrick_Sandoval2 %>%  
+  ggplot(aes(release_speed, release_spin_rate, color = pitch_type))+
+  geom_point(size = 3, alpha = 0.5)+  
+  theme_minimal()+  
+  labs(title = "Pitching Type, and relation with release spin rate and release speed")
+
+**To do some simple analysis before we move on, he drastically increased his usage on sinker, replacing his four-seam fastballs. This change also increased his velocity as he was sitting lower 90s when he used four-seam more, when he started using sinker, his velocity is sitting mainly at mid-90s.**
+**As of his best pitch  — changeup, his velocity also increased, but with a decrease in spin rate.**
+**His sliders had a higher spin rate on his second start, and kept his velocity at the similar level. He also reduced his usage on curveball, with nothing changed significantly.**
+
+**Now let’s trynna merge these two stats together**
+
+# let's name this new combined data PS_combined
+# use rbind() to stacks the two data frames on top of each other, appending the second data frame to the first.
+
+PS_combined <- rbind(Patrick_Sandoval, Patrick_Sandoval2)
+
+**Now the larger data set is done, we can start using ggplot2 to make another chart with the same variables**
+# check graph 4 for result
+
+# you will see the same warning as we were doing his previous start which is normal as I explained above
+
+library(ggplot2)
+library(tidyverse)
+PS_combined %>%
+  ggplot(aes(release_speed,
+  release_spin_rate, color = pitch_type))+
+  geom_point(size = 3, alpha = 0.5)+
+  theme_minimal()+
+  labs(title = "Pitching Type, and relation with release spin rate and release speed")
+
+**Now we can see Sandoval’s pitches in relation with the release speed and spin rate. There are some pitches that were outside of the normal frame but they are insignificant. We can estimate the following by these two starts**
+
+- Four-seam Fastball: 90-95 mph, 1800-2250 rpms
+- Sinker: 93-96 mph, 1750-2250 rpms
+- Changeup: 82.5-87 mph, 1500-1800 rpms
+- Slider: 85-88 mph, 2300-2800 rpms
+- Curveball: 77.5-81 mph, 2700-3000 rpms
+
+**To take things to another level, let’s pull out Sandoval’s all 2022 regular season starts**
+
+# pull out Sandoval's 2022 regular season starts
+# there are 2456 rows in total but we don't have to print them all
+# in this case I just printed out 120 rows just to make sure the data is correct
+
+library(baseballr)
+library(tidyverse)
+PS_2022 <- try(statcast_search(start_date = "2022-04-07",
+                               end_date = "2022-10-05",
+                               playerid = 663776,
+                               player_type = 'pitcher')) %>% print(n = 120)
+
+**Instead of using spin rate and release speed again, this time we are using the horizontal and vertical break of his pitches**
+# check graph 5 for result
+
+# make a movement plot with pitch movement (pfx_x, pfx_z)
+
+library(ggplot2)
+library(tidyverse)PS_2022 %>%
+  ggplot(aes(pfx_x, pfx_z, color = pitch_type))+
+  geom_point(size = 1.5, alpha = 0.5)+
+  theme_grey()+
+  labs(title = "Patrick Sandoval Pitching Movement",
+       subtitle = "2022 MLB Season | Catcher's POV",
+       x = "Horizontal Break",
+       y = "Induced Vertical Break")
+
+# since the x and y axis are named after pfx_x and pfx_z, we have to rename
+# rename x as Horizontal Break and y as Induced Vertical Break
+
+**In this case the pitching movement is displayed in feet, let’s change it into inches and try again**
+
